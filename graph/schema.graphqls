@@ -1,0 +1,105 @@
+type Chip {
+    id: ID!
+    persons: [User!]!
+    createdAt: String!
+    password: String!
+}
+
+type User {
+    id: ID!
+    chip: Chip!
+    username: String!
+    firstName: String
+    lastName: String
+    email: String
+    createdAt: String!
+    updatedAt: String
+}
+
+type Container {
+    id: ID!
+    status: Status!
+    street: String!
+    createdAt: String!
+    updatedAt: String
+    cType: cType!
+    position: Position!
+    capacity: [Capacity!]!
+}
+
+type History {
+    id: ID!
+    containerID: ID!
+    chipID: ID!
+    day: String!
+    date: String!
+    time: String!
+    used: String!
+    volume: Capacity!
+}
+
+type Capacity {
+    id: ID!
+    capacity: Int!
+}
+
+type Position {
+    latitude: Float!
+    longitude: Float!
+}
+
+type cType {
+    id: ID!
+    name: String!
+}
+
+type Status {
+    id: ID!
+    name: String!
+}
+
+# Fetching endpoint
+type Query {
+    chip(id: ID!): Chip
+
+    user(id: ID!): User
+
+    container(id: ID!): Container
+
+    historyByContainerID(containerID: ID!): History
+    historyByChipID(chipID: ID!): [History!]!
+    historyByChipIDByPeriod(chipID: ID!, startDate: String!, endDate: String!): [History!]!
+    historyByChipIDByContainerID(chipID: ID!, containerID: ID!): [History!]!
+    hitoryByChipIDByContainerIDByPeriod(chipID: ID!, containerID: ID!, startDate: String!, endDate: String!): [History!]!
+}
+
+# Manipulate data
+type Mutation {
+    createChip(id: ID!, password: String!): Chip!
+    updateChip(id: ID!, password: String!): Chip
+    deleteChip(id: ID!): Boolean!
+
+    createUser(username: String!): User!
+    updateUser(id: ID!, name: String, email: String): User
+    deleteUser(id: ID!): Boolean!
+
+    createContainer(street: String!, cTypeID: ID!): Container!
+    updateContainer(id: ID!, status: String, street: String): Container
+    deleteContainer(id: ID!): Boolean!
+
+    createHistory(containerID: ID!, chipID: ID!, day: String!, date: String!, time: String!, used: String!): History!
+    # updateHistory(id: ID!, used: String!): History
+    deleteHistory(id: ID!): Boolean!
+
+    createCapacity(capacity: Int!): Capacity!
+    updateCapacity(id: ID!, capacity: Int!): Capacity
+    deleteCapacity(id: ID!): Boolean!
+
+    createPosition(latitude: Float!, longitude: Float!): Position!
+    updatePosition(id: ID!, latitude: Float, longitude: Float): Position
+    deletePosition(id: ID!): Boolean!
+
+    createCType(name: String!): cType!
+    updateCType(id: ID!, name: String!): cType
+    deleteCType(id: ID!): Boolean!
+}
